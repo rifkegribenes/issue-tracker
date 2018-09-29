@@ -7,9 +7,11 @@
 */
 
 var chai = require('chai');
+var mocha = require('mocha');
+var suite = mocha.suite;
 
 suite('Unit Tests', function(){
 
-//none requiered
+// none required
 
 });
