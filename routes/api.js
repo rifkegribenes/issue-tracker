@@ -28,18 +28,19 @@ module.exports = function (app) {
     
     .post((req, res) => {
       const project = req.params.project;
-      Project.findOneAndUpdate(
-      const newIssue = new Issue({
-        issue_title: req.body.issue_title,
-        issue_text: req.body.issue_text,
-        created_on: new Date(),
-        updated_on: new Date(),
-        created_by: req.body.created_by,
-        assigned_to: req.body.assigned_to || '',
-        open: true,
-        status_text: req.body.status_text || ''
-      });
-      if (!newIssue.issue_title || !newIssue.issue_text || !newIssue.created_by) {
+      Project.findOne({ name: project })
+        .then((project) => {
+          const newIssue = new Issue({
+            issue_title: req.body.issue_title,
+            issue_text: req.body.issue_text,
+            created_on: new Date(),
+            updated_on: new Date(),
+            created_by: req.body.created_by,
+            assigned_to: req.body.assigned_to || '',
+            open: true,
+            status_text: req.body.status_text || ''
+          });
+        if (!newIssue.issue_title || !newIssue.issue_text || !newIssue.created_by) {
         res.send('missing inputs');
       } else {
         newIssue.save()
@@ -51,6 +52,9 @@ module.exports = function (app) {
             return handleError(res, err);
           });
       }
+      });
+
+      
     })
     
     .put((req, res) => {
