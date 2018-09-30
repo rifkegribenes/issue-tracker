@@ -43,32 +43,32 @@ module.exports = function (app) {
           if (!newIssue.issue_title || !newIssue.issue_text || !newIssue.created_by) {
               res.send('missing inputs');
             } else {
-           if (!project) {
-             const newProject = new Project({
-                name,
-                issues: [ newIssue ]
-              });
-             newProject.save()
-                .then((project) => {
-                  const savedIssue = project.issues.find((issue) => issue.issue_title === newIssue.issue_title);
-                  res.status(200).json({savedIssue});
-                })
-                .catch((err) => {
-                  console.log(`api.js > post newProject.save: ${err}`);
-                  return handleError(res, err);
+             if (!project) {
+               const newProject = new Project({
+                  name,
+                  issues: [ newIssue ]
                 });
-            } else {
-            project.issues.push(newIssue);
-            project.save()
-              .then((project) => {
-                const savedIssue = project.issues.find((issue) => issue.issue_title === newIssue.issue_title);
-                res.status(200).json({savedIssue});
-              })
-              .catch((err) => {
-                console.log(`api.js > post existingProject.save: ${err}`);
-                return handleError(res, err);
-              });
-          }
+               newProject.save()
+                  .then((project) => {
+                    const savedIssue = project.issues.find((issue) => issue.issue_title === newIssue.issue_title);
+                    res.status(200).json({savedIssue});
+                  })
+                  .catch((err) => {
+                    console.log(`api.js > post newProject.save: ${err}`);
+                    return handleError(res, err);
+                  });
+              } else {
+                project.issues.push(newIssue);
+                project.save()
+                  .then((project) => {
+                    const savedIssue = project.issues.find((issue) => issue.issue_title === newIssue.issue_title);
+                    res.status(200).json({savedIssue});
+                  })
+                  .catch((err) => {
+                    console.log(`api.js > post existingProject.save: ${err}`);
+                    return handleError(res, err);
+                  });
+              }
             }
           })
         .catch((err) => {
