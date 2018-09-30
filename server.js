@@ -21,6 +21,12 @@ app.use(helmet.xssFilter());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// connect to db
+const mongoose = require('mongoose');
+const configDB = require('./config/database.js');
+mongoose.connect(configDB.url, configDB.options);
+mongoose.Promise = global.Promise;
+
 //Sample front-end
 app.route('/:project/')
   .get(function (req, res) {
