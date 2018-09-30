@@ -28,7 +28,7 @@ module.exports = function (app) {
     
     .post((req, res) => {
       const project = req.params.project;
-      Project
+      Project.findOneAndUpdate(
       const newIssue = new Issue({
         issue_title: req.body.issue_title,
         issue_text: req.body.issue_text,
