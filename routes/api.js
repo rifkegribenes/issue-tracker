@@ -12,6 +12,8 @@ var expect = require('chai').expect;
 var MongoClient = require('mongodb');
 var ObjectId = require('mongodb').ObjectID;
 
+const Issue = require('../models/issue');
+
 const CONNECTION_STRING = process.env.DB; 
 
 module.exports = function (app) {
@@ -48,8 +50,9 @@ module.exports = function (app) {
       }
     })
     
-    .put(function (req, res){
-      var project = req.params.project;
+    .put((req, res) => {
+      const project = req.params.project;
+
       
     })
     
