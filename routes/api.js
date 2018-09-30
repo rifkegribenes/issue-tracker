@@ -27,8 +27,8 @@ module.exports = function (app) {
     })
     
     .post((req, res) => {
-      const project = req.params.project;
-      Project.findOne({ name: project })
+      const name = req.params.project;
+      Project.findOne({ name })
         .then((project) => {
           const newIssue = new Issue({
             issue_title: req.body.issue_title,
@@ -43,17 +43,26 @@ module.exports = function (app) {
           if (!newIssue.issue_title || !newIssue.issue_text || !newIssue.created_by) {
               res.send('missing inputs');
             } else {
-              project.issues.push(newIssue);
-              project.save()
-                .then((project) => {
-                  const savedIssue = project.issues.find((issue) => issue.issue_title === newIssue.issue_title);
-                  res.status(200).json({issue: savedIssue});
-                })
-                .catch((err) => {
-                  console.log(`api.js > post project.save: ${err}`);
-                  return handleError(res, err);
-                });
-            }
+           if (!project) {
+             const newProject = new Project({
+                  name,
+                  issues: [ newIssue ]
+              });
+              newProject.save()
+               .then()
+               .catch()
+          } else {
+            project.issues.push(newIssue);
+            project.save()
+              .then((project) => {
+                const savedIssue = project.issues.find((issue) => issue.issue_title === newIssue.issue_title);
+                res.status(200).json({issue: savedIssue});
+              })
+              .catch((err) => {
+                console.log(`api.js > post project.save: ${err}`);
+                return handleError(res, err);
+              });
+          }
         })
         .catch((err) => {
           console.log(`api.js > post Project.findOne: ${err}`);
