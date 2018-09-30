@@ -40,19 +40,25 @@ module.exports = function (app) {
             open: true,
             status_text: req.body.status_text || ''
           });
-        if (!newIssue.issue_title || !newIssue.issue_text || !newIssue.created_by) {
-        res.send('missing inputs');
-      } else {
-        newIssue.save()
-          .then((issue) => {
-            res.status(200).json(issue);
-          })
-        	.catch((err) => {
-	          console.log(`api.js > post: ${err}`);
-            return handleError(res, err);
-          });
-      }
-      });
+          if (!newIssue.issue_title || !newIssue.issue_text || !newIssue.created_by) {
+              res.send('missing inputs');
+            } else {
+              project.issues.push(newIssue);
+              project.save()
+                .then((project) => {
+                  const savedIssue = project.issues.find((issue) => issue.issue_title === newIssue.issue_title);
+                  res.status(200).json({issue: savedIssue});
+                })
+                .catch((err) => {
+                  console.log(`api.js > post project.save: ${err}`);
+                  return handleError(res, err);
+                });
+            }
+        })
+        .catch((err) => {
+          console.log(`api.js > post Project.findOne: ${err}`);
+          return handleError(res, err);
+        });
 
       
     })
