@@ -10,7 +10,8 @@
 
 var expect = require('chai').expect;
 
-const Issue = require('../models/issue');
+const Models = require('../models');
+const { Project, Issue } = Models;
 
 module.exports = function (app) {
   
@@ -27,6 +28,7 @@ module.exports = function (app) {
     
     .post((req, res) => {
       const project = req.params.project;
+      Project
       const newIssue = new Issue({
         issue_title: req.body.issue_title,
         issue_text: req.body.issue_text,
