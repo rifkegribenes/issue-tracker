@@ -45,31 +45,36 @@ module.exports = function (app) {
             } else {
            if (!project) {
              const newProject = new Project({
-                  name,
-                  issues: [ newIssue ]
+                name,
+                issues: [ newIssue ]
               });
-              newProject.save()
-               .then()
-               .catch()
-          } else {
+             newProject.save()
+                .then((project) => {
+                  const savedIssue = project.issues.find((issue) => issue.issue_title === newIssue.issue_title);
+                  res.status(200).json({savedIssue});
+                })
+                .catch((err) => {
+                  console.log(`api.js > post newProject.save: ${err}`);
+                  return handleError(res, err);
+                });
+            } else {
             project.issues.push(newIssue);
             project.save()
               .then((project) => {
                 const savedIssue = project.issues.find((issue) => issue.issue_title === newIssue.issue_title);
-                res.status(200).json({issue: savedIssue});
+                res.status(200).json({savedIssue});
               })
               .catch((err) => {
-                console.log(`api.js > post project.save: ${err}`);
+                console.log(`api.js > post existingProject.save: ${err}`);
                 return handleError(res, err);
               });
           }
-        })
+            }
+          })
         .catch((err) => {
           console.log(`api.js > post Project.findOne: ${err}`);
           return handleError(res, err);
-        });
-
-      
+        });      
     })
     
     .put((req, res) => {
