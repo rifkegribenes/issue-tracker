@@ -79,10 +79,38 @@ module.exports = function (app) {
     
     .put((req, res) => {
       const name = req.params.project;
+      const _id = req.body._id;
+      delete req.body._id;
       Project.findOne({ name })
       .then((project) => {
         if (!project) {
-          res.send('project not found'
+          res.status(400).send('project not found');
+        } else {
+          const issue = project.issues.find((issue) => issue._id === _id);
+          const updatedIssue = { ...req.body };
+          for (let key in updatedIssue) { 
+            if (!updatedIssue[key]) { delete updatedIssue[key] } 
+          }
+          if (Object.keys(updatedIssue).length === 0) {
+            res.send('no updated field sent');
+          } else {
+            updatedIssue.updated_on = new Date();
+            project.issues.push(newIssue);
+            project.save()
+              .then((project) => {
+                const savedIssue = project.issues.find((issue) => issue.issue_title === newIssue.issue_title);
+                res.status(200).json({savedIssue});
+              })
+              .catch((err) => {
+                console.log(`api.js > post existingProject.save: ${err}`);
+                res.send('could not update '+issue+' '+err);
+              });
+              collection.findAndModify({_id:new ObjectId(issue)},[['_id',1]],{$set: updates},{new: true},function(err,doc){
+                (!err) ? res.send('successfully updated') : res.send('could not update '+issue+' '+err);
+                //console.log(doc.value);
+              });
+            });    
+          }
         }
       })
       .catch((err) => {
