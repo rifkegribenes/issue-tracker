@@ -138,6 +138,7 @@ suite('Functional Tests', function() {
           done();
         });  
       });
+    });
     
     suite('GET /api/issues/{project} => Array of objects with issue data', function() {
       
