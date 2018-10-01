@@ -88,7 +88,18 @@ suite('Functional Tests', function() {
         });
       
       test('Missing required fields', function(done) {
-        
+       chai.request(server)
+        .post('/api/issues/test')
+        .send({
+          issue_title: 'Title 3',
+          created_by: 'Functional Test - Missing required fields',
+          assigned_to: 'Chai and Mocha'
+        })
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'missing inputs');
+          done();
+        });        
       });
       
     });
