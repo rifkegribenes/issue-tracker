@@ -78,7 +78,17 @@ module.exports = function (app) {
     })
     
     .put((req, res) => {
-      const project = req.params.project;
+      const name = req.params.project;
+      Project.findOne({ name })
+      .then((project) => {
+        if (!project) {
+          res.send('project not found'
+        }
+      })
+      .catch((err) => {
+          console.log(`api.js > put Project.findOne: ${err}`);
+          return handleError(res, err);
+        }); 
 
       
     })

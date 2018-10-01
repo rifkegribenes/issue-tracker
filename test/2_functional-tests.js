@@ -107,18 +107,37 @@ suite('Functional Tests', function() {
     suite('PUT /api/issues/{project} => text', function() {
       
       test('No body', function(done) {
-        
+        chai.request(server)
+        .put('/api/issues/test')
+        .send({_id: _id1})
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'no updated field sent');
+          done();
+        });        
       });
       
       test('One field to update', function(done) {
-        
+        chai.request(server)
+        .put('/api/issues/test')
+        .send({_id: _id1, issue_text: 'updated issue text test'})
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'successfully updated');
+          done();
+        });  
       });
       
       test('Multiple fields to update', function(done) {
-        
+        chai.request(server)
+        .put('/api/issues/test')
+        .send({_id: _id2, issue_text: 'updated issue text test for the second issue', open: 'false'})
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'successfully updated');
+          done();
+        });  
       });
-      
-    });
     
     suite('GET /api/issues/{project} => Array of objects with issue data', function() {
       
