@@ -87,16 +87,21 @@ module.exports = function (app) {
           res.status(400).send('project not found');
         } else {
           const issue = project.issues.find((issue) => issue._id === _id);
+          console.log('issue:');
+          console.log(issue);
           const index = project.issues.indexOf(issue);
-          const updatedIssue = { ...req.body };
-          for (let key in issue) { 
-            if (updatedIssue[key]) { delete issue[key] } 
+          const updates = { ...req.body };
+          console.log('updates:');
+          console.log(updates);
+          for (let key in updates) { 
+            if (!updates[key]) { delete updates[key] } 
           }
-          if (Object.keys(updatedIssue).length === 0) {
+          if (Object.keys(updates).length === 0) {
             res.send('no updated field sent');
           } else {
-            updatedIssue.updated_on = new Date();
-            
+            updates.updated_on = new Date();
+            delete issue.updated_on;
+            const updatedIssue = { ...updates, ...issue }
             project.issues.splice(index, 1, updatedIssue);
             project.save()
               .then(() => {
