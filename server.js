@@ -53,20 +53,22 @@ app.use(function(req, res, next) {
 });
 
 //Start our server and tests!
-app.listen(process.env.PORT || 3000, function () {
-  console.log("Listening on port " + process.env.PORT);
-  if(process.env.NODE_ENV==='test') {
-    console.log('Running Tests...');
-    setTimeout(function () {
-      try {
-        runner.run();
-      } catch(e) {
-        var error = e;
-          console.log('Tests are not valid:');
-          console.log(error);
-      }
-    }, 3500);
-  }
-});
+if(!module.parent){
+  app.listen(process.env.PORT || 3000, function () {
+    console.log("Listening on port " + process.env.PORT);
+    if(process.env.NODE_ENV==='test') {
+      console.log('Running Tests...');
+      setTimeout(function () {
+        try {
+          runner.run();
+        } catch(e) {
+          var error = e;
+            console.log('Tests are not valid:');
+            console.log(error);
+        }
+      }, 3500);
+    }
+  });
+}
 
 module.exports = app; //for testing

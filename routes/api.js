@@ -51,7 +51,7 @@ module.exports = function (app) {
                newProject.save()
                   .then((project) => {
                     const savedIssue = project.issues.find((issue) => issue.issue_title === newIssue.issue_title);
-                    res.status(200).json({savedIssue});
+                    res.status(200).json(savedIssue);
                   })
                   .catch((err) => {
                     console.log(`api.js > post newProject.save: ${err}`);
@@ -62,7 +62,7 @@ module.exports = function (app) {
                 project.save()
                   .then((project) => {
                     const savedIssue = project.issues.find((issue) => issue.issue_title === newIssue.issue_title);
-                    res.status(200).json({savedIssue});
+                    res.status(200).json(savedIssue);
                   })
                   .catch((err) => {
                     console.log(`api.js > post existingProject.save: ${err}`);
