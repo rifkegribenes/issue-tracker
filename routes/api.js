@@ -21,7 +21,7 @@ module.exports = function (app) {
 
   app.route('/api/issues/:project')
   
-    .get(function (req, res){
+    .get((req, res) => {
       const name = req.params.project;
       Project.findOne({ name })
         .then((project) => {
@@ -128,10 +128,29 @@ module.exports = function (app) {
       
     })
     
-    .delete(function (req, res){
-      const project = req.params.project;
-      const _id = req.body._id.toString();
-      Project.delete()
+    .delete((req, res) => {
+      const name = req.params.project;
+      const _id = req.body._id;
+      if (!_id) { return res.status(200).send('_id error') };
+      Project.findOne({ name })
+        .then((project) => {
+          const issue = project.issues.find((issue) => issue._id.toString() === _id.toString());
+          const index = project.issues.indexOf(issue);
+          project.issues.splice(index, 1);
+          project.save()
+            .then(() => {
+              res.status(200).send(`deleted ${_id}`);
+            })
+            .catch((err) => {
+              console.log(`api.js > delete project.save: ${err}`);
+              res.status(200).send(`could not delete ${_id}`);
+            }); 
+          
+        })
+        .catch((err) => {
+          console.log(`api.js > delete Project.findOne: ${err}`);
+          return handleError(res, err);
+        }); 
       
     });
     
