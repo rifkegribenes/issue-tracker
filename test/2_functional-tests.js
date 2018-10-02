@@ -120,7 +120,7 @@ suite('Functional Tests', function() {
       test('One field to update', function(done) {
         chai.request(server)
         .put('/api/issues/test')
-        .send({_id: _id1, issue_text: 'updated issue text test'})
+        .send({_id: _id2, issue_text: 'updated issue text test'})
         .end(function(err, res){
           assert.equal(res.status, 200);
           assert.equal(res.text, 'successfully updated');
