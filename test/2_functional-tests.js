@@ -163,11 +163,44 @@ suite('Functional Tests', function() {
       });
       
       test('One filter', function(done) {
-        
+        chai.request(server)
+        .get('/api/issues/test')
+        .query({assigned_to: 'Chai and Mocha'})
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.property(res.body[0], 'issue_title');
+          assert.property(res.body[0], 'issue_text');
+          assert.property(res.body[0], 'created_on');
+          assert.property(res.body[0], 'updated_on');
+          assert.property(res.body[0], 'created_by');
+          assert.property(res.body[0], 'assigned_to');
+          assert.property(res.body[0], 'open');
+          assert.property(res.body[0], 'status_text');
+          assert.property(res.body[0], '_id');
+          assert.equal(res.body[0].assigned_to, 'Chai and Mocha');
+          done();
+        });
       });
       
       test('Multiple filters (test for multiple fields you know will be in the db for a return)', function(done) {
-        
+        chai.request(server)
+        .get('/api/issues/test')
+        .query({open: false, issue_title: 'Title 2'})
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.property(res.body[0], 'issue_title');
+          assert.property(res.body[0], 'issue_text');
+          assert.property(res.body[0], 'created_on');
+          assert.property(res.body[0], 'updated_on');
+          assert.property(res.body[0], 'created_by');
+          assert.property(res.body[0], 'assigned_to');
+          assert.property(res.body[0], 'open');
+          assert.property(res.body[0], 'status_text');
+          assert.property(res.body[0], '_id');
+          assert.equal(res.body[0].open, false);
+          assert.equal(res.body[0].issue_title, 'Title 2');
+          done();
+        });
       });
       
     });
@@ -175,11 +208,25 @@ suite('Functional Tests', function() {
     suite('DELETE /api/issues/{project} => text', function() {
       
       test('No _id', function(done) {
-        
+        chai.request(server)
+        .delete('/api/issues/test')
+        .send({})
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.equal(res.text, '_id error');
+          done();
+        });  
       });
       
       test('Valid _id', function(done) {
-        
+        chai.request(server)
+        .delete('/api/issues/test')
+        .send({_id: _id2})
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'deleted '+_id2);
+          done();
+        });  
       });
       
     });

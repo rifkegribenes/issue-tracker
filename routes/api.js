@@ -25,6 +25,9 @@ module.exports = function (app) {
       const name = req.params.project;
       Project.findOne({ name })
         .then((project) => {
+          const query = req.query;
+          console.log('query');
+          console.log(query);
           res.status(200).send(project.issues);
         })
         .catch((err) => {
@@ -126,7 +129,9 @@ module.exports = function (app) {
     })
     
     .delete(function (req, res){
-      var project = req.params.project;
+      const project = req.params.project;
+      const _id = req.body._id.toString();
+      Project.delete()
       
     });
     
