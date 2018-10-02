@@ -89,13 +89,14 @@ module.exports = function (app) {
           const issue = project.issues.find((issue) => issue._id === _id);
           const index = project.issues.indexOf(issue);
           const updatedIssue = { ...req.body };
-          for (let key in updatedIssue) { 
-            if (!updatedIssue[key]) { delete updatedIssue[key] } 
+          for (let key in issue) { 
+            if (updatedIssue[key]) { delete issue[key] } 
           }
           if (Object.keys(updatedIssue).length === 0) {
             res.send('no updated field sent');
           } else {
             updatedIssue.updated_on = new Date();
+            
             project.issues.splice(index, 1, updatedIssue);
             project.save()
               .then(() => {
