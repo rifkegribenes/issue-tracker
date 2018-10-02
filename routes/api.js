@@ -86,10 +86,7 @@ module.exports = function (app) {
         if (!project) {
           res.status(400).send('project not found');
         } else {
-          console.log('issues');
-          console.log(project.issues);
-          console.log('_id', _id);
-          const issue = project.issues.find((issue) => issue._id === _id);
+          const issue = project.issues.find((issue) => issue._id.toString() === _id.toString());
           console.log('issue:');
           console.log(issue);
           const index = project.issues.indexOf(issue);
@@ -104,7 +101,9 @@ module.exports = function (app) {
           } else {
             updates.updated_on = new Date();
             delete issue.updated_on;
-            const updatedIssue = { ...updates, ...issue }
+            const updatedIssue = { ...updates, ...issue._doc }
+            console.log('updatedIssue:');
+            console.log(updatedIssue);
             project.issues.splice(index, 1, updatedIssue);
             project.save()
               .then(() => {
