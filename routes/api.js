@@ -37,15 +37,19 @@ module.exports = function (app) {
             query._id = query._id.toString()
           }
           const keys = Object.keys(query);
+          console.log('query');
+          console.log(query);
+          console.log('keys');
+          console.log(keys);
           let issues = project.issues;
           issues.forEach(issue => issue._id = issue._id.toString());
           if (keys.length) {
             console.log(issues.length);
-            for (let key in keys) {
-              console.log(key);
+            keys.forEach((key) => {
+              console.log(`query[${key}]: ${query[key]}`);
               issues = issues.filter(issue => issue[key] == query[key])
               console.log(issues.length);
-            }
+            })
           }
           res.status(200).send(issues);
         })
