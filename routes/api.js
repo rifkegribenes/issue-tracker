@@ -27,10 +27,16 @@ module.exports = function (app) {
         .then((project) => {
           const query = req.query;
           if (query.open) { 
-            query.open = String(query.open) == "true" 
+            query.open = query.open.toString() === "true" 
+          }
+          if (query._id) {
+            console.log('query._id');
+            console.log(query._id);
+            query._id = query._id.toString()
           }
           const keys = Object.keys(query);
           let issues = project.issues;
+          issues.forEach(issue => issue._id = issue._id.toString());
           if (keys.length) {
             for (let key in keys) {
               issues = issues.filter(issue => issue[key] === query[key])
