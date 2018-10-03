@@ -47,7 +47,8 @@ module.exports = function (app) {
             console.log(issues.length);
             keys.forEach((key) => {
               console.log(`query[${key}]: ${query[key]}`);
-              issues = issues.filter(issue => issue[key] == query[key])
+              issues = issues.filter(issue => issue[key].toString() == query[key].toString());
+              console.log(issues);
               console.log(issues.length);
             })
           }
