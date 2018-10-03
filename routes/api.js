@@ -41,13 +41,14 @@ module.exports = function (app) {
           console.log(query);
           console.log('keys');
           console.log(keys);
-          let issues = project.issues;
+          let issues = Array.from(project.issues);
+          console.log(issues);
           issues.forEach(issue => issue._id = issue._id.toString());
           if (keys.length) {
             console.log(issues.length);
             keys.forEach((key) => {
               console.log(`query[${key}]: ${query[key]}`);
-              issues = issues.filter(issue => issue[key].toString() == query[key].toString());
+              issues = issues.filter(issue => issue[key] == query[key]);
               console.log(issues);
               console.log(issues.length);
             })
