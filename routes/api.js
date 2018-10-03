@@ -27,7 +27,9 @@ module.exports = function (app) {
         .then((project) => {
           const query = req.query;
           if (query.open) { 
+            console.log(query.open);
             query.open = query.open.toString() === "true" 
+            console.log(query.open);
           }
           if (query._id) {
             console.log('query._id');
@@ -38,12 +40,13 @@ module.exports = function (app) {
           let issues = project.issues;
           issues.forEach(issue => issue._id = issue._id.toString());
           if (keys.length) {
+            console.log(issues.length);
             for (let key in keys) {
-              issues = issues.filter(issue => issue[key] === query[key])
+              console.log(key);
+              issues = issues.filter(issue => issue[key] == query[key])
+              console.log(issues.length);
             }
           }
-          console.log('issues');
-          console.log(issues);
           res.status(200).send(issues);
         })
         .catch((err) => {
