@@ -26,9 +26,19 @@ module.exports = function (app) {
       Project.findOne({ name })
         .then((project) => {
           const query = req.query;
-          console.log('query');
-          console.log(query);
-          res.status(200).send(project.issues);
+          if (query.open) { 
+            query.open = String(query.open) == "true" 
+          }
+          const keys = Object.keys(query);
+          let issues = project.issues;
+          if (keys.length) {
+            for (let key in keys) {
+              issues = issues.filter(issue => issue[key] === query[key])
+            }
+          }
+          console.log('issues');
+          console.log(issues);
+          res.status(200).send(issues);
         })
         .catch((err) => {
             console.log(`api.js > get Project.findOne: ${err}`);
