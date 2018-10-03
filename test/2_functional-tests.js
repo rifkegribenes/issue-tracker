@@ -185,7 +185,7 @@ suite('Functional Tests', function() {
       test('Multiple filters (test for multiple fields you know will be in the db for a return)', function(done) {
         chai.request(server)
         .get('/api/issues/test')
-        .query({open: false, issue_text: 'updated issue text test for the second issue'})
+        .query({open: true, issue_title: 'Title 2'})
         .end(function(err, res){
           assert.equal(res.status, 200);
           assert.property(res.body[0], 'issue_title');
@@ -197,8 +197,8 @@ suite('Functional Tests', function() {
           assert.property(res.body[0], 'open');
           assert.property(res.body[0], 'status_text');
           assert.property(res.body[0], '_id');
-          assert.equal(res.body[0].open, false);
-          assert.equal(res.body[0].issue_text, 'updated issue text test for the second issue');
+          assert.equal(res.body[0].open, true);
+          assert.equal(res.body[0].issue_title, 'Title 2');
           done();
         });
       });

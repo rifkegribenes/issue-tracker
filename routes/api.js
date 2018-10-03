@@ -27,30 +27,17 @@ module.exports = function (app) {
         .then((project) => {
           const query = req.query;
           if (query.open) { 
-            console.log(query.open);
             query.open = query.open.toString() === "true" 
-            console.log(query.open);
           }
           if (query._id) {
-            console.log('query._id');
-            console.log(query._id);
             query._id = query._id.toString()
           }
           const keys = Object.keys(query);
-          console.log('query');
-          console.log(query);
-          console.log('keys');
-          console.log(keys);
           let issues = Array.from(project.issues);
-          console.log(issues);
           issues.forEach(issue => issue._id = issue._id.toString());
           if (keys.length) {
-            console.log(issues.length);
             keys.forEach((key) => {
-              console.log(`query[${key}]: ${query[key]}`);
               issues = issues.filter(issue => issue[key] == query[key]);
-              console.log(issues);
-              console.log(issues.length);
             })
           }
           res.status(200).send(issues);
@@ -139,7 +126,7 @@ module.exports = function (app) {
                 res.status(200).send('successfully updated')
               })
               .catch((err) => {
-                console.log(`api.js > post existingProject.save: ${err}`);
+                console.log(`api.js > put existingProject.save: ${err}`);
                 res.status(200).send(`could not update ${issue} ${err}`);
               });   
           }
