@@ -187,6 +187,8 @@ suite('Functional Tests', function() {
         .get('/api/issues/test')
         .query({open: false, issue_title: 'Title 2'})
         .end(function(err, res){
+          console.log('res.body[0]');
+          console.log(res.body[0]);
           assert.equal(res.status, 200);
           assert.property(res.body[0], 'issue_title');
           assert.property(res.body[0], 'issue_text');
